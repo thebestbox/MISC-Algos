@@ -1,0 +1,8 @@
+def Euclid(a,b): #finds the GCD of a,b
+    while(b!=0):
+        r = a%b
+        a = b
+        b=r
+    return a
+a = Euclid(18,30)
+print(a)
