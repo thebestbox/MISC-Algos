@@ -1,0 +1,30 @@
+import math as ma
+
+def FFT(poly):
+    N = len(poly)  # Number of coefficients needs to be a power of 2
+    w = complex(ma.cos(2 * ma.pi / N), -ma.sin(2 * ma.pi / N))  # Smallest primitive Nth root of unity
+    coefficients = FFT_recursive(poly, w)
+    return coefficients
+
+def FFT_recursive(poly, w):
+    N = len(poly)
+    if N == 1:
+        return poly
+    else:
+        even_poly = poly[0::2]  # Slice of even-indexed coefficients
+        odd_poly = poly[1::2]   # Slice of odd-indexed coefficients
+        
+        B = FFT_recursive(even_poly, w**2)
+        C = FFT_recursive(odd_poly, w**2)
+        
+        coefficients = [0] * N
+        for k in range(N // 2):
+            coefficients[k] = B[k] + w**k * C[k]
+            coefficients[k + N // 2] = B[k] - w**k * C[k]
+        
+        return coefficients
+
+# Example usage
+poly = [1.0,2,4,4,2,3,5,6]  # Example polynomial coefficients
+coefficients = FFT(poly)
+print("FFT Coefficients:", coefficients)
